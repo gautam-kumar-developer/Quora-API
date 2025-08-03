@@ -2,53 +2,80 @@ package com.example.Quora.services;
 
 import com.example.Quora.models.User;
 import com.example.Quora.repositories.UserRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 @Service
-public class UserService {
+public class UserService implements CommandLineRunner {
+
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public boolean isRegistered(UUID id) {
-        Optional<User> user = userRepository.findById(id);
+    @Override
+    public void run(String... args) {
+        // Dummy User Data
+        User u1 = User.builder()
+                .userName("ronnySharam")
+                .email("xyz@gmail.com")
+                .build();
+        userRepository.save(u1);
+        System.out.println(u1.getId());
+
+        User u2 = User.builder()
+                .userName("rohitSharam")
+                .email("abc@gmail.com")
+                .build();
+        userRepository.save(u2);
+        System.out.println(u2.getId());
+    }
+
+    public boolean isRegistered(String userName) {
+        Optional<User> user = userRepository.findByUserName(userName);
         return user.isPresent();
     }
 
     public User createNewUser(User user) {
         User user1 = User.builder()
-                .id(user.getId())
                 .userName(user.getUserName())
                 .email(user.getEmail())
                 .bio(user.getBio())
                 .build();
-        return user;
+        userRepository.save(user1);
+        return user1;
     }
 
     public User findUserById(UUID id) {
-        if(userRepository.findById(id).isPresent())
+        if (userRepository.findById(id).isPresent())
             return userRepository.findById(id).get();
         else
             return null;
     }
 
-    public User updateUser(User user) { // Updates Registered users and create if not registered
-        if(userRepository.findById(user.getId()).isPresent()) {
-            User u = findUserById(user.getId());
-            u.setId(user.getId());
+    public User updateUser(UUID userId, User user) { // Updates Registered users only
+        User u = findUserById(userId);
+        if(user.getUserName() != null && !user.getUserName().equals(u.getUserName())) {
             u.setUserName(user.getUserName());
+        }
+        if(user.getEmail() != null && !user.getEmail().equals(u.getEmail())) {
             u.setEmail(user.getEmail());
+        }
+        if(user.getBio() != null && !user.getBio().equals(u.getBio())) {
             u.setBio(user.getBio());
-            return u;
         }
-        else {
-            return createNewUser(user);
-        }
+
+        userRepository.save(u);
+        return u;
 
     }
 
+    public List<User> finAllUser() {
+        return userRepository.findAll();
+    }
 }
