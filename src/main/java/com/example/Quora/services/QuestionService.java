@@ -1,5 +1,6 @@
 package com.example.Quora.services;
 
+import com.example.Quora.models.Answer;
 import com.example.Quora.models.Question;
 
 import com.example.Quora.models.Topic;
@@ -11,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class QuestionService {
@@ -51,4 +50,9 @@ public class QuestionService {
         // Call the custom repository method
         return questionRepository.findByTextAndTopics(searchText, searchTopics);
     }
+
+    public Optional<Question> findQuestionById(UUID questionId) {
+        return questionRepository.findById(questionId);
+    }
+
 }

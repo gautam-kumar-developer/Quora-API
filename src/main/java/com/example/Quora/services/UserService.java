@@ -46,6 +46,7 @@ public class UserService implements CommandLineRunner {
                 .userName(user.getUserName())
                 .email(user.getEmail())
                 .bio(user.getBio())
+                .questions(user.getQuestions())
                 .build();
         userRepository.save(user1);
         return user1;

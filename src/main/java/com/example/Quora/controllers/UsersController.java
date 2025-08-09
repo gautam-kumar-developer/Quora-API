@@ -53,5 +53,4 @@ public class UsersController {
         else
             return new ResponseEntity<String>("No such user found with specified details.", HttpStatus.NOT_FOUND);
     }
-
 }

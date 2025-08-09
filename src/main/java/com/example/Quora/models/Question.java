@@ -1,5 +1,6 @@
 package com.example.Quora.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -40,4 +41,8 @@ public class Question {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
+    @JsonIgnore  // Prevent recursion here
+    private Set<Answer> answer;
 }
