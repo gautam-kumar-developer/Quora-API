@@ -1,5 +1,7 @@
 package com.example.Quora.services;
 
+import com.example.Quora.models.Answer;
+import com.example.Quora.models.Question;
 import com.example.Quora.models.User;
 import com.example.Quora.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -13,9 +15,13 @@ import java.util.UUID;
 public class UserService implements CommandLineRunner {
 
     private final UserRepository userRepository;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, QuestionService questionService, AnswerService answerService) {
         this.userRepository = userRepository;
+        this.questionService = questionService;
+        this.answerService = answerService;
     }
 
     @Override
@@ -26,14 +32,20 @@ public class UserService implements CommandLineRunner {
                 .email("xyz@gmail.com")
                 .build();
         userRepository.save(u1);
-        System.out.println(u1.getId());
+        System.out.println("User Id1 : " + u1.getId());
 
         User u2 = User.builder()
                 .userName("rohitSharam")
                 .email("abc@gmail.com")
                 .build();
         userRepository.save(u2);
-        System.out.println(u2.getId());
+        System.out.println("User Id2 : " + u2.getId());
+
+        // creating dummy question
+        Question question = questionService.createDummyQuestion(u1);
+
+        // creating dummy answer for the above question
+        Answer answer = answerService.createDummyAnswer(question, u2);
     }
 
     public boolean isRegistered(String userName) {

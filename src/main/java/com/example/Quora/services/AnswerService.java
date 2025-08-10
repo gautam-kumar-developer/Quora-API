@@ -1,6 +1,8 @@
 package com.example.Quora.services;
 
 import com.example.Quora.models.Answer;
+import com.example.Quora.models.Question;
+import com.example.Quora.models.User;
 import com.example.Quora.repositories.AnswerRepository;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +37,17 @@ public class AnswerService {
             answerRepository.save(oldAnswer);
         }
         return oldAnswer;
+    }
+
+    public Answer createDummyAnswer(Question question, User u2) {
+        Answer answer = Answer.builder()
+                .question(question)
+                .user(u2)
+                .text("In Java, polymorphism is the ability for the same action (method call) to behave differently depending on the actual object type at runtime.")
+                .build();
+
+        Answer ans = answerRepository.save(answer);
+        System.out.println("Answer id : " + ans.getId());
+        return ans;
     }
 }

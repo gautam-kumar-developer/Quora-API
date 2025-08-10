@@ -27,7 +27,7 @@ public class Question {
     @Column(nullable = false)
     private String body;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "question_topic",
             joinColumns = @JoinColumn(name = "question_id", referencedColumnName = "id"),

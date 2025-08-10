@@ -35,4 +35,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore  // Prevent recursion here
     private Set<Answer> answers;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Comment> comments;
 }
